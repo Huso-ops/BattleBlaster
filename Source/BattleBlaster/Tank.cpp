@@ -47,7 +47,7 @@ void ATank::Tick(float DeltaTime)
 
 		RotateTurret(HitResult.ImpactPoint);
 
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20.0f, 20, FColor::Blue, false);
+		//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20.0f, 20, FColor::Blue, false);
 	}
 }
 

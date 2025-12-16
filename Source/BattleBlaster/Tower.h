@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "BattleBlasterGameMode.generated.h"
+#include "BasePawn.h"
+#include "Tower.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTLEBLASTER_API ABattleBlasterGameMode : public AGameModeBase
+class BATTLEBLASTER_API ATower : public ABasePawn
 {
 	GENERATED_BODY()
 
@@ -19,7 +19,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	class ATank* Tank;
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-	int32 TowerCount = { 0 };
+	class ATank* Tank;
+	
 };
