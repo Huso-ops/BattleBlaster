@@ -369,5 +369,7 @@ Intermediate/
 Saved/
 .vs/
 .vscode/
-.vsconfig/
-BattleBlaster.sln/
+
+# Visual Studio
+.vsconfig
+*.sln
