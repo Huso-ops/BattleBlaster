@@ -39,6 +39,16 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		FHitResult HitResult;
+
+		PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult);
+
+		RotateTurret(HitResult.ImpactPoint);
+
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20.0f, 20, FColor::Blue, false);
+	}
 }
 
 // Called to bind functionality to input
@@ -49,10 +59,26 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if (UEnhancedInputComponent* EIC = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EIC->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATank::MoveInput);
+
+		EIC->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ATank::TurnInput);
 	}
 }
 
-void ATank::MoveInput()
+void ATank::MoveInput(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("I Like to move it."));
+	const float InputValue = Value.Get<float>();
+
+	FVector DeltaLocation = FVector(Speed * InputValue * GetWorld()->GetDeltaSeconds(), 0.0f, 0.0f);
+
+	AddActorLocalOffset(DeltaLocation, true);
+}
+
+void ATank::TurnInput(const FInputActionValue& Value)
+{
+	const float InputValue = Value.Get<float>();
+
+	FRotator DeltaRotation = FRotator(0.0f, 0.0f, 0.0f);
+	DeltaRotation.Yaw = TurnRate * InputValue * GetWorld()->GetDeltaSeconds();
+
+	AddActorLocalRotation(DeltaRotation, true);
 }
