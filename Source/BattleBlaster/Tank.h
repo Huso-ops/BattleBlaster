@@ -46,15 +46,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MoveAction;
 
-
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* TurnAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* FireAction;
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 300.0f;
 
 	UPROPERTY(EditAnywhere)
 	float TurnRate = 50.0f;
+
+	UPROPERTY(EditAnywhere)
+	float TowerRotateSpeed = 5.0f;
 
 	void MoveInput(const FInputActionValue& Value);
 

@@ -24,18 +24,13 @@ void ABattleBlasterGameMode::BeginPlay()
 
 			return;
 		}
-	}
 
-	TArray<ATower*> Towers;
-	Towers.Reserve(TowerCount);
-
-	for (AActor* Actor : Actors)
-	{
-		if (ATower* Tower = Cast<ATower>(Actor))
+		for (AActor* Actor : Actors)
 		{
-			Tower->Tank = Tank;
-
-			Towers.Add(Tower);
+			if (ATower* Tower = Cast<ATower>(Actor))
+			{
+				Tower->Tank = Tank;
+			}
 		}
 	}
 }

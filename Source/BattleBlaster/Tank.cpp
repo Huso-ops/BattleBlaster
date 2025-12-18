@@ -45,7 +45,7 @@ void ATank::Tick(float DeltaTime)
 
 		PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult);
 
-		RotateTurret(HitResult.ImpactPoint);
+		RotateTurret(HitResult.ImpactPoint, TowerRotateSpeed);
 
 		//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20.0f, 20, FColor::Blue, false);
 	}
@@ -61,6 +61,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EIC->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATank::MoveInput);
 
 		EIC->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ATank::TurnInput);
+
+		EIC->BindAction(FireAction, ETriggerEvent::Started, this, &ATank::Fire);
 	}
 }
 

@@ -17,16 +17,30 @@ ABasePawn::ABasePawn()
 
 	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMash"));
 	TurretMesh->SetupAttachment(BaseMesh);
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawnPoint"));
+	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 }
 
-void ABasePawn::RotateTurret(const FVector& TargetLocation)
+void ABasePawn::RotateTurret(const FVector& TargetLocation, const float& RotateSpeed)
 {
-	FVector VectorToTarget = TargetLocation - TurretMesh->GetComponentLocation();
+	const FVector VectorToTarget = TargetLocation - TurretMesh->GetComponentLocation();
 
-	FRotator LookAtRotation = FRotator(0.0f, VectorToTarget.Rotation().Yaw, 0.0f);
+	const FRotator LookAtRotation = FRotator(0.0f, VectorToTarget.Rotation().Yaw, 0.0f);
 
-	FRotator InterpolatedRotation = FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), 5.0f);
+	const FRotator InterpolatedRotation = FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
 
-	TurretMesh->SetWorldRotation(LookAtRotation);
+	//const FRotator InterpolatedRotation = FMath::RInterpConstantTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
+
+	TurretMesh->SetWorldRotation(InterpolatedRotation);
+}
+
+void ABasePawn::Fire()
+{
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
+
+	Projectile->SetOwner(this);
+
+	//DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 20.0f, 20, FColor::Blue, false, 3.0f);
 }
 
