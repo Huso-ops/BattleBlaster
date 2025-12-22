@@ -36,6 +36,8 @@ void ATank::BeginPlay()
 			SubSystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	SetInputPlayerEnabled(false);
 }
 
 // Called every frame

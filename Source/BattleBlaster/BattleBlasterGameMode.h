@@ -23,10 +23,20 @@ public:
 
 	int32 TowerCount = { 0 };
 
+	bool bIsVictory{ false };
+
 	UPROPERTY(EditAnywhere)
 	float GameOverDelay = { 3.0f };
+
+	UPROPERTY(EditAnywhere)
+	int32 CountdownDelay{ 3 };
+
+	int32 CountDownSeconds;
+
+	FTimerHandle CountDownTimerHandle;
 
 	void ActorDied(AActor* DeadActor);
 
 	void OnGameOverTimerTimeOut();
+	void OnCountdownTimerTimeout();
 };
