@@ -26,6 +26,8 @@ public:
 
 	bool IsInFireRange();
 
+	void HandleDesctruction();
+
 	class ATank* Tank;
 
 	UPROPERTY(EditAnywhere)
@@ -36,6 +38,4 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float FireRate = 2.0f;
-
-	
 };

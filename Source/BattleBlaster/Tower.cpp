@@ -17,22 +17,18 @@ void ATower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!IsInFireRange())
+	if (IsInFireRange())
 	{
-		return;
+		RotateTurret(Tank->GetActorLocation(), TowerRotateSpeed);
 	}
-
-	RotateTurret(Tank->GetActorLocation(), TowerRotateSpeed);
 }
 
 void ATower::CheckFireCondition()
-{
-	if (!IsInFireRange())
+{	
+	if (IsInFireRange() && Tank->bIsAlive)
 	{
-		return;
+		Fire();
 	}
-
-	Fire();
 }
 
 bool ATower::IsInFireRange()
@@ -47,4 +43,11 @@ bool ATower::IsInFireRange()
 	}
 
 	return Result;
+}
+
+void ATower::HandleDesctruction()
+{
+	Super::HandleDesctruction();
+
+	Destroy();
 }

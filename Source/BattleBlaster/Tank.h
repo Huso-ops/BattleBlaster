@@ -61,7 +61,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	float TowerRotateSpeed = 5.0f;
 
+	APlayerController* PlayerController;
+
+	bool bIsAlive{ true };
+
 	void MoveInput(const FInputActionValue& Value);
 
 	void TurnInput(const FInputActionValue& Value);
+
+	void HandleDesctruction();
+
+	void SetInputPlayerEnabled(const bool& Enabled);
 };

@@ -28,9 +28,9 @@ void ABasePawn::RotateTurret(const FVector& TargetLocation, const float& RotateS
 
 	const FRotator LookAtRotation = FRotator(0.0f, VectorToTarget.Rotation().Yaw, 0.0f);
 
-	const FRotator InterpolatedRotation = FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
+	//const FRotator InterpolatedRotation = FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
 
-	//const FRotator InterpolatedRotation = FMath::RInterpConstantTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
+	const FRotator InterpolatedRotation = FMath::RInterpConstantTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
 
 	TurretMesh->SetWorldRotation(InterpolatedRotation);
 }
@@ -42,5 +42,9 @@ void ABasePawn::Fire()
 	Projectile->SetOwner(this);
 
 	//DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 20.0f, 20, FColor::Blue, false, 3.0f);
+}
+
+void ABasePawn::HandleDesctruction()
+{
 }
 

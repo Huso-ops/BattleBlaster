@@ -20,7 +20,17 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Health = MaxHealth;
+
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::OnDamageTaken);
 	
+	AGameModeBase* GameMode = UGameplayStatics::GetGameMode(GetWorld());
+
+	if (!IsValid(GameMode)) 
+	{
+		return;
+	}
+
+	BattleBlasterGameMode = Cast<ABattleBlasterGameMode>(GameMode);
 }
 
 
@@ -31,4 +41,20 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	// ...
 }
+
+void UHealthComponent::OnDamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (!IsValid(BattleBlasterGameMode) || Damage <= 0.0f)
+	{
+		return;
+	}
+	
+	Health -= Damage;
+
+	if (Health <= 0.0f) 
+	{
+		BattleBlasterGameMode->ActorDied(DamagedActor);
+	}
+}
+
 

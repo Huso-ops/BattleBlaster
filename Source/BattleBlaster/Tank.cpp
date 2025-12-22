@@ -22,14 +22,18 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	PlayerController = Cast<APlayerController>(Controller);
+
+	if (!IsValid(PlayerController))
 	{
-		if (ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PlayerController->GetLocalPlayer()))
+		return;
+	}
+
+	if (ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* SubSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			if (UEnhancedInputLocalPlayerSubsystem* SubSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
-			{
-				SubSystem->AddMappingContext(DefaultMappingContext, 0);
-			}
+			SubSystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
 }
@@ -39,7 +43,7 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	if (PlayerController)
 	{
 		FHitResult HitResult;
 
@@ -84,3 +88,34 @@ void ATank::TurnInput(const FInputActionValue& Value)
 
 	AddActorLocalRotation(DeltaRotation, true);
 }
+
+void ATank::HandleDesctruction()
+{
+	Super::HandleDesctruction();
+
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+	SetInputPlayerEnabled(false);
+
+	bIsAlive = false;
+}
+
+void ATank::SetInputPlayerEnabled(const bool& Enabled)
+{
+	if (!IsValid(PlayerController))
+	{
+		return;
+	}
+
+	PlayerController->bShowMouseCursor = Enabled;
+
+	if (Enabled)
+	{
+		EnableInput(PlayerController);
+	} 
+	else 
+	{
+		DisableInput(PlayerController);
+	}
+}
+

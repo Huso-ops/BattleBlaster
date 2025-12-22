@@ -13,6 +13,9 @@ class BATTLEBLASTER_API ABasePawn : public APawn
 {
 	GENERATED_BODY()
 
+protected:
+	void HandleDesctruction();
+
 public:
 	// Sets default values for this pawn's properties
 	ABasePawn();

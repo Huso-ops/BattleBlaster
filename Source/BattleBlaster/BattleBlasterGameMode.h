@@ -22,4 +22,11 @@ public:
 	class ATank* Tank;
 
 	int32 TowerCount = { 0 };
+
+	UPROPERTY(EditAnywhere)
+	float GameOverDelay = { 3.0f };
+
+	void ActorDied(AActor* DeadActor);
+
+	void OnGameOverTimerTimeOut();
 };
