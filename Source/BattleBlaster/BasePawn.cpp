@@ -50,14 +50,19 @@ void ABasePawn::HandleDesctruction()
 	const UWorld* World = GetWorld();
 	const FVector CurrentActorLocation = GetActorLocation();
 
-	if(IsValid(DeathParticles)) 
+	if(DeathParticles)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, DeathParticles, CurrentActorLocation, GetActorRotation());
 	}
 
-	if (IsValid(DeathSound))
+	if (DeathSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(World, DeathSound, CurrentActorLocation);
+	}
+
+	if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0); PlayerController && DeathCameraShakeClass)
+	{
+		PlayerController->ClientStartCameraShake(DeathCameraShakeClass);
 	}
 }
 

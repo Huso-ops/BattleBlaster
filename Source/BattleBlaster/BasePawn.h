@@ -42,6 +42,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	USoundBase* DeathSound;
 
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShakeBase> DeathCameraShakeClass;
+
 	void RotateTurret(const FVector& TargetLocation, const float& RotateSpeed);
 
 	void Fire();

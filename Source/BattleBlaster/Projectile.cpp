@@ -38,25 +38,31 @@ void AProjectile::Tick(float DeltaTime)
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (AActor* MyOwner = GetOwner(); IsValid(MyOwner))
+{	
+	AActor* MyOwner = GetOwner();
+	const UWorld* World = GetWorld();
+
+	const bool bShouldApplyEffects = IsValid(MyOwner) && IsValid(OtherActor) && OtherActor != MyOwner && OtherActor != this && World;
+
+	if (bShouldApplyEffects)
 	{
-		if (IsValid(OtherActor) && OtherActor != MyOwner && OtherActor != this)
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, UDamageType::StaticClass());
+
+		const FVector CurrentActorLocation = GetActorLocation();
+
+		if (HitParticles)
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, UDamageType::StaticClass());
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, HitParticles, CurrentActorLocation, GetActorRotation());
+		}
 
-			const UWorld* World = GetWorld();
-			const FVector CurrentActorLocation = GetActorLocation();
+		if (HitSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(World, HitSound, CurrentActorLocation);
+		}
 
-			if (IsValid(HitParticles))
-			{
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, HitParticles, CurrentActorLocation, GetActorRotation());
-			}
-
-			if (IsValid(HitSound))
-			{
-				UGameplayStatics::PlaySoundAtLocation(World, HitSound, CurrentActorLocation);
-			}
+		if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0); PlayerController && HitCameraShakeClass)
+		{
+			PlayerController->ClientStartCameraShake(HitCameraShakeClass);
 		}
 	}
 
