@@ -29,9 +29,10 @@ void ABasePawn::RotateTurret(const FVector& TargetLocation, const float& RotateS
 
 	const FRotator LookAtRotation = FRotator(0.0f, VectorToTarget.Rotation().Yaw, 0.0f);
 
-	//const FRotator InterpolatedRotation = FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
+	const FRotator InterpolatedRotation = FMath::RInterpTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
 
-	const FRotator InterpolatedRotation = FMath::RInterpConstantTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
+	// tower yavaþ dönüp doðal animasyon olmasý için aþþaðýdaki kod çalýþtýrýlabilir. üstteki kodun çalýþtýrýlma amacý oyunu zorlaþtýrmak
+	//const FRotator InterpolatedRotation = FMath::RInterpConstantTo(TurretMesh->GetComponentRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotateSpeed);
 
 	TurretMesh->SetWorldRotation(InterpolatedRotation);
 }

@@ -26,12 +26,26 @@ void ABattleBlasterGameMode::BeginPlay()
 
 			return;
 		}		
+	
+		if (UGameInstance* GameInstance = GetGameInstance())
+		{
+			BattleBlasterGameInstance = Cast<UBattleBlasterGameInstance>(GameInstance);
+		}
 
 		for (AActor* Actor : Actors)
 		{
 			if (ATower* Tower = Cast<ATower>(Actor))
 			{
 				Tower->Tank = Tank;
+				
+				if (BattleBlasterGameInstance)
+				{
+					const auto [TowerDamagePerLevel, TowerFireRatePerLevel, TowerFireRangeLevel] = BattleBlasterGameInstance->GetTowerDifficulty();
+
+					Tower->Damage += TowerDamagePerLevel;
+					Tower->FireRate += TowerFireRatePerLevel;
+					Tower->FireRange += TowerFireRangeLevel;
+				}
 			}
 		}
 	}
@@ -114,15 +128,6 @@ void ABattleBlasterGameMode::ActorDied(AActor* DeadActor)
 
 void ABattleBlasterGameMode::OnGameOverTimerTimeOut()
 {
-	UGameInstance* GameInstance = GetGameInstance();
-
-	if (!GameInstance)
-	{
-		return;
-	}
-
-	UBattleBlasterGameInstance* BattleBlasterGameInstance = Cast<UBattleBlasterGameInstance>(GameInstance);
-
 	if (!IsValid(BattleBlasterGameInstance))
 	{
 		return;

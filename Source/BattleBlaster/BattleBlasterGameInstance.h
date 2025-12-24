@@ -24,7 +24,15 @@ public:
 	void LoadNextLevel();
 	void RestartCurrentLevel();
 	void RestartGame();
+	
+	std::tuple<float, float, float> GetTowerDifficulty() const;
 
 private:
+	UPROPERTY()
+	float TowerDamagePerLevel{ 0.0f }; 
+	float TowerFireRatePerLevel{ 0.0f }; 
+	float TowerFireRangeLevel{ 0.0f }; 
+	void IncreaseTowerDifficultyPerLevel();
+	void SetTowerDifficultyReset();
 	void LoadLevel(const int32& Index);
 };

@@ -41,6 +41,8 @@ public:
 
 	FTimerHandle CountDownTimerHandle;
 
+	class UBattleBlasterGameInstance* BattleBlasterGameInstance;
+
 	void ActorDied(AActor* DeadActor);
 
 	void OnGameOverTimerTimeOut();

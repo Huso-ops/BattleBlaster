@@ -3,6 +3,7 @@
 
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
+#include "BasePawn.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -40,13 +41,21 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {	
 	AActor* MyOwner = GetOwner();
+
+	ABasePawn* BasePawn = nullptr;
+
+	if (IsValid(MyOwner))
+	{
+		BasePawn = Cast<ABasePawn>(MyOwner);
+	}
+
 	const UWorld* World = GetWorld();
 
-	const bool bShouldApplyEffects = IsValid(MyOwner) && IsValid(OtherActor) && OtherActor != MyOwner && OtherActor != this && World;
+	const bool bShouldApplyEffects = BasePawn && IsValid(OtherActor) && OtherActor != MyOwner && OtherActor != this && World;
 
 	if (bShouldApplyEffects)
 	{
-		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(OtherActor, BasePawn->Damage, MyOwner->GetInstigatorController(), this, UDamageType::StaticClass());
 
 		const FVector CurrentActorLocation = GetActorLocation();
 
