@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Projectile.h"
+#include "NiagaraComponent.h"
 #include "BasePawn.generated.h"
 
 UCLASS()
@@ -34,6 +35,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* DeathParticles;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* DeathSound;
 
 	void RotateTurret(const FVector& TargetLocation, const float& RotateSpeed);
 

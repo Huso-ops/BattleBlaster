@@ -36,6 +36,17 @@ void ABattleBlasterGameMode::BeginPlay()
 		}
 	}
 
+	if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0); IsValid(PlayerController))
+	{
+		ScreenMessageWidget = CreateWidget<UScreenMessage>(PlayerController, ScreenMessageClass);
+
+		if (IsValid(ScreenMessageWidget))
+		{
+			ScreenMessageWidget->AddToPlayerScreen();
+			ScreenMessageWidget->SetScreenMessage("Get Ready!!!");
+		}
+	}
+
 	CountDownSeconds = CountdownDelay;
 
 	GetWorldTimerManager().SetTimer(CountDownTimerHandle, this, &ABattleBlasterGameMode::OnCountdownTimerTimeout, 1.0f, true);
@@ -45,16 +56,18 @@ void ABattleBlasterGameMode::OnCountdownTimerTimeout()
 {
 	if (CountDownSeconds <= 0) 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Go"));
+		ScreenMessageWidget->SetScreenMessage("Go");
 
 		Tank->SetInputPlayerEnabled(true);
 
 		GetWorldTimerManager().ClearTimer(CountDownTimerHandle);
 
+		ScreenMessageWidget->SetVisibility(ESlateVisibility::Hidden);
+
 		return;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Game will start in %d"), CountDownSeconds);
+	
+	ScreenMessageWidget->SetScreenMessage(FString::Printf(TEXT("Game will start in %d"), CountDownSeconds));
 
 	CountDownSeconds -= 1;
 }
@@ -88,9 +101,11 @@ void ABattleBlasterGameMode::ActorDied(AActor* DeadActor)
 
 	if (bIsGameOver)
 	{
-		FString GameOverMessage = bIsVictory ? "Victory!" : "Defeat!";
+		const FString GameOverMessage = bIsVictory ? "Victory!" : "Defeat!";
 
-		UE_LOG(LogTemp, Warning, TEXT("Game Status %s"), *GameOverMessage);
+		ScreenMessageWidget->SetScreenMessage(GameOverMessage);
+
+		ScreenMessageWidget->SetVisibility(ESlateVisibility::Visible);
 
 		FTimerHandle GameOverTimerHandle;
 		GetWorldTimerManager().SetTimer(GameOverTimerHandle, this, &ABattleBlasterGameMode::OnGameOverTimerTimeOut, GameOverDelay, false);

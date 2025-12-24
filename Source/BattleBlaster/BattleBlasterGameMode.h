@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "ScreenMessage.h"
 #include "BattleBlasterGameMode.generated.h"
 
 /**
@@ -19,6 +20,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UScreenMessage> ScreenMessageClass;
+
+	UScreenMessage* ScreenMessageWidget;
+
 	class ATank* Tank;
 
 	int32 TowerCount = { 0 };
