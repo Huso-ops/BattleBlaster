@@ -60,9 +60,9 @@ void ABattleBlasterGameMode::OnCountdownTimerTimeout()
 
 		Tank->SetInputPlayerEnabled(true);
 
-		GetWorldTimerManager().ClearTimer(CountDownTimerHandle);
-
 		ScreenMessageWidget->SetVisibility(ESlateVisibility::Hidden);
+
+		GetWorldTimerManager().ClearTimer(CountDownTimerHandle);
 
 		return;
 	}
