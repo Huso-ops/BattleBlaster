@@ -19,7 +19,7 @@ public:
 	int32 MaxLevelIndex{ 3 };
 
 	UPROPERTY(VisibleAnywhere)
-	int32 CurrentLevelIndex{ 1 };
+	int32 CurrentLevelIndex{ 1 };    
 	
 	void LoadNextLevel();
 	void RestartCurrentLevel();

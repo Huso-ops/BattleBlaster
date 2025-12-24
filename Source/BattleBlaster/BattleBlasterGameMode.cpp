@@ -25,7 +25,7 @@ void ABattleBlasterGameMode::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Game Couldn't Find The Tank Actor"));
 
 			return;
-		}
+		}		
 
 		for (AActor* Actor : Actors)
 		{
@@ -116,7 +116,7 @@ void ABattleBlasterGameMode::OnGameOverTimerTimeOut()
 {
 	UGameInstance* GameInstance = GetGameInstance();
 
-	if (!IsValid(GameInstance)) 
+	if (!GameInstance)
 	{
 		return;
 	}
