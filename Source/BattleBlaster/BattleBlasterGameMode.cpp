@@ -43,8 +43,10 @@ void ABattleBlasterGameMode::BeginPlay()
 					const auto [TowerDamagePerLevel, TowerFireRatePerLevel, TowerFireRangeLevel] = BattleBlasterGameInstance->GetTowerDifficulty();
 
 					Tower->Damage += TowerDamagePerLevel;
-					Tower->FireRate += TowerFireRatePerLevel;
 					Tower->FireRange += TowerFireRangeLevel;
+					Tower->FireRate += TowerFireRatePerLevel;
+
+					Tower->FireRate = Tower->FireRate <= 0 ? 1.0f : Tower->FireRate;
 				}
 			}
 		}
